@@ -8,6 +8,7 @@ const authRoutes = require("./routes/auth");
 const riskRoutes = require("./routes/risk");
 const historyRoutes = require("./routes/history");
 const logbookRoutes = require("./routes/logbook");
+const quizRoutes = require("./routes/quiz");
 
 const app = express();
 app.use(cors());
@@ -20,6 +21,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api", riskRoutes);
 app.use("/api", historyRoutes);
 app.use("/api", logbookRoutes);
+app.use("/api", quizRoutes);
 
 connectMongo()
   .then(() => {

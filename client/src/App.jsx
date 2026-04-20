@@ -5,6 +5,7 @@ import AuthView from "./views/AuthView";
 import AssessmentPage from "./pages/AssessmentPage";
 import LogbookPage from "./pages/LogbookPage";
 import HistoryPage from "./pages/HistoryPage";
+import KnowledgePage from "./pages/KnowledgePage";
 
 export default function App() {
   const [token, setToken] = useState(() => localStorage.getItem("token") || "");
@@ -52,11 +53,15 @@ export default function App() {
         <button onClick={() => setTab("history")} disabled={tab === "history"}>
           History
         </button>
+        <button onClick={() => setTab("knowledge")} disabled={tab === "knowledge"}>
+          Knowledge
+        </button>
       </div>
 
       {tab === "assessment" && <AssessmentPage api={api} onUnauthorized={handleUnauthorized} />}
       {tab === "logbook" && <LogbookPage api={api} onUnauthorized={handleUnauthorized} />}
       {tab === "history" && <HistoryPage api={api} onUnauthorized={handleUnauthorized} />}
+      {tab === "knowledge" && <KnowledgePage api={api} onUnauthorized={handleUnauthorized} />}
     </div>
   );
 }
