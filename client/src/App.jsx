@@ -6,12 +6,14 @@ import AssessmentPage from "./pages/AssessmentPage";
 import LogbookPage from "./pages/LogbookPage";
 import HistoryPage from "./pages/HistoryPage";
 import KnowledgePage from "./pages/KnowledgePage";
+import SettingsPage from "./pages/SettingsPage";
 
 const tabs = [
   { key: "assessment", label: "Assessment", icon: "♡" },
   { key: "logbook", label: "Logbook", icon: "✎" },
   { key: "history", label: "History", icon: "⏱" },
   { key: "knowledge", label: "Knowledge", icon: "📖" },
+  { key: "settings", label: "Settings", icon: "⚙" },
 ];
 
 function getStoredTheme() {
@@ -96,6 +98,7 @@ export default function App() {
         {tab === "logbook" && <LogbookPage api={api} onUnauthorized={handleUnauthorized} />}
         {tab === "history" && <HistoryPage api={api} onUnauthorized={handleUnauthorized} />}
         {tab === "knowledge" && <KnowledgePage api={api} onUnauthorized={handleUnauthorized} />}
+        {tab === "settings" && <SettingsPage api={api} onUnauthorized={handleUnauthorized} onAccountDeleted={logout} />}
       </main>
     </div>
   );
