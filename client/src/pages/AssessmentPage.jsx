@@ -9,6 +9,13 @@ function toNumOrNull(v) {
   return Number.isFinite(n) ? n : null;
 }
 
+const card = {
+  background: "#fff",
+  border: "1px solid #e5e7eb",
+  padding: 20,
+  borderRadius: 10,
+};
+
 export default function AssessmentPage({ api, onUnauthorized }) {
   const [form, setForm] = useState({
     age: "45",
@@ -86,11 +93,20 @@ export default function AssessmentPage({ api, onUnauthorized }) {
     }
   }
 
-  return (
-    <section style={{ border: "1px solid #ddd", padding: 12, borderRadius: 8 }}>
-      <h3>Risk Inputs</h3>
+  function bandColor(band) {
+    if (!band) return "#6b7280";
+    const b = band.toLowerCase();
+    if (b.includes("low")) return "#16a34a";
+    if (b.includes("moderate") || b.includes("medium")) return "#d97706";
+    if (b.includes("high")) return "#ef4444";
+    return "#6b7280";
+  }
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+  return (
+    <section style={card}>
+      <h3 style={{ marginBottom: 16 }}>Risk Assessment</h3>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
         <Field label="Age" value={form.age} onChange={(v) => onChange("age", v)} />
 
         <Select
@@ -126,7 +142,7 @@ export default function AssessmentPage({ api, onUnauthorized }) {
         />
 
         <div>
-          <label style={{ display: "block", fontSize: 12, marginBottom: 4 }}>
+          <label style={{ display: "block", fontSize: 13, fontWeight: 500, marginBottom: 4 }}>
             Cigarettes / day
           </label>
           <input
@@ -136,13 +152,13 @@ export default function AssessmentPage({ api, onUnauthorized }) {
             style={{ width: "100%" }}
           />
           {isSmoker && (
-            <label style={{ display: "block", marginTop: 6, fontSize: 12 }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 6, fontSize: 12, color: "#6b7280" }}>
               <input
                 type="checkbox"
                 checked={unknown.cigsPerDay}
                 onChange={(e) => setUnknownFlag("cigsPerDay", e.target.checked)}
-              />{" "}
-              I don’t know (default 10/day)
+              />
+              I don't know (default 10/day)
             </label>
           )}
         </div>
@@ -172,31 +188,49 @@ export default function AssessmentPage({ api, onUnauthorized }) {
         />
       </div>
 
-      <div style={{ marginTop: 12, display: "flex", gap: 8, alignItems: "center" }}>
+      <div style={{ marginTop: 16, display: "flex", gap: 8, alignItems: "center" }}>
         <button onClick={submitRisk} disabled={loading}>
           {loading ? "Calculating..." : "Calculate Risk"}
         </button>
-        {submitErr && <span style={{ color: "crimson" }}>{submitErr}</span>}
+        {submitErr && <span style={{ color: "#ef4444", fontSize: 14 }}>{submitErr}</span>}
       </div>
 
       {result && (
-        <div style={{ marginTop: 12, borderTop: "1px solid #eee", paddingTop: 12 }}>
-          <h3>Result</h3>
-          <div>
-            <b>Risk:</b> {(result.risk * 100).toFixed(2)}%
-          </div>
-          <div>
-            <b>Band:</b> {result.risk_band}
-          </div>
-          <div>
-            <b>Confidence:</b> {result.confidence}
-          </div>
-          {result.range && (
+        <div style={{
+          marginTop: 16,
+          padding: 16,
+          background: "#f9fafb",
+          borderRadius: 8,
+          border: "1px solid #e5e7eb",
+        }}>
+          <h3 style={{ marginBottom: 12 }}>Result</h3>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
             <div>
-              <b>Range:</b> {(result.range.low * 100).toFixed(2)}% –{" "}
-              {(result.range.high * 100).toFixed(2)}%
+              <div style={{ fontSize: 12, color: "#6b7280" }}>Risk Score</div>
+              <div style={{ fontSize: 22, fontWeight: 700 }}>
+                {(result.risk * 100).toFixed(2)}%
+              </div>
             </div>
-          )}
+            <div>
+              <div style={{ fontSize: 12, color: "#6b7280" }}>Risk Band</div>
+              <div style={{ fontSize: 18, fontWeight: 600, color: bandColor(result.risk_band) }}>
+                {result.risk_band}
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 12, color: "#6b7280" }}>Confidence</div>
+              <div style={{ fontSize: 16, fontWeight: 500 }}>{result.confidence}</div>
+            </div>
+            {result.range && (
+              <div>
+                <div style={{ fontSize: 12, color: "#6b7280" }}>Range</div>
+                <div style={{ fontSize: 16, fontWeight: 500 }}>
+                  {(result.range.low * 100).toFixed(2)}% – {(result.range.high * 100).toFixed(2)}%
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </section>

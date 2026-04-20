@@ -7,6 +7,13 @@ import LogbookPage from "./pages/LogbookPage";
 import HistoryPage from "./pages/HistoryPage";
 import KnowledgePage from "./pages/KnowledgePage";
 
+const tabs = [
+  { key: "assessment", label: "Assessment" },
+  { key: "logbook", label: "Logbook" },
+  { key: "history", label: "History" },
+  { key: "knowledge", label: "Knowledge" },
+];
+
 export default function App() {
   const [token, setToken] = useState(() => localStorage.getItem("token") || "");
   const api = useMemo(() => makeApi(token), [token]);
@@ -34,28 +41,37 @@ export default function App() {
   }
 
   return (
-    <div style={{ maxWidth: 980, margin: "24px auto", padding: 16, fontFamily: "Arial" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
+    <div>
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 20,
+        paddingBottom: 16,
+        borderBottom: "1px solid #e5e7eb",
+      }}>
         <div>
-          <h2 style={{ marginBottom: 4 }}>HeartSmart</h2>
-          <div style={{ fontSize: 12, opacity: 0.75 }}>Authenticated session</div>
+          <h2 style={{ fontSize: 22 }}>HeartSmart</h2>
+          <div style={{ fontSize: 12, color: "#6b7280", marginTop: 2 }}>
+            Coronary Artery Disease — Risk & Knowledge
+          </div>
         </div>
-        <button onClick={logout}>Logout</button>
+        <button className="secondary" onClick={logout} style={{ fontSize: 13 }}>
+          Logout
+        </button>
       </div>
 
-      <div style={{ display: "flex", gap: 8, margin: "16px 0" }}>
-        <button onClick={() => setTab("assessment")} disabled={tab === "assessment"}>
-          Assessment
-        </button>
-        <button onClick={() => setTab("logbook")} disabled={tab === "logbook"}>
-          Logbook
-        </button>
-        <button onClick={() => setTab("history")} disabled={tab === "history"}>
-          History
-        </button>
-        <button onClick={() => setTab("knowledge")} disabled={tab === "knowledge"}>
-          Knowledge
-        </button>
+      <div style={{ display: "flex", gap: 6, marginBottom: 20 }}>
+        {tabs.map((t) => (
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            className={tab === t.key ? undefined : "secondary"}
+            style={{ fontSize: 13 }}
+          >
+            {t.label}
+          </button>
+        ))}
       </div>
 
       {tab === "assessment" && <AssessmentPage api={api} onUnauthorized={handleUnauthorized} />}
