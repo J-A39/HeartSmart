@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { API_BASE } from "../api";
 
-export default function AuthView({ onToken }) {
+export default function AuthView({ onToken, theme, toggleTheme }) {
   const [mode, setMode] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,31 +39,45 @@ export default function AuthView({ onToken }) {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      background: "#f0f2f5",
+      background: "var(--bg-page)",
     }}>
       <div style={{
         width: "100%",
         maxWidth: 420,
         padding: 36,
-        background: "#fff",
+        background: "var(--bg-card)",
         borderRadius: 16,
-        boxShadow: "0 4px 24px rgba(0, 0, 0, 0.06)",
+        boxShadow: "var(--shadow-modal)",
+        border: "1px solid var(--border)",
       }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
+          <button className="ghost" onClick={toggleTheme} style={{ fontSize: 16, padding: "4px 8px" }}>
+            {theme === "light" ? "🌙" : "☀️"}
+          </button>
+        </div>
+
         <div style={{ textAlign: "center", marginBottom: 28 }}>
           <h2 style={{ fontSize: 26, letterSpacing: "-0.3px" }}>HeartSmart</h2>
-          <div style={{ color: "#9ca3af", fontSize: 13, marginTop: 4 }}>
+          <div style={{ color: "var(--text-faint)", fontSize: 13, marginTop: 4 }}>
             Coronary Artery Disease — Risk & Knowledge
           </div>
         </div>
 
-        <div style={{ display: "flex", gap: 0, marginBottom: 24, background: "#f3f4f6", borderRadius: 8, padding: 3 }}>
+        <div style={{
+          display: "flex",
+          gap: 0,
+          marginBottom: 24,
+          background: "var(--bg-toggle)",
+          borderRadius: 8,
+          padding: 3,
+        }}>
           <button
             onClick={() => setMode("login")}
             style={{
               flex: 1,
-              background: mode === "login" ? "#fff" : "transparent",
-              color: mode === "login" ? "#1a1a1a" : "#6b7280",
-              boxShadow: mode === "login" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+              background: mode === "login" ? "var(--bg-card)" : "transparent",
+              color: mode === "login" ? "var(--text-primary)" : "var(--text-muted)",
+              boxShadow: mode === "login" ? "var(--shadow-card)" : "none",
               borderRadius: 6,
               fontSize: 14,
               fontWeight: 500,
@@ -79,9 +93,9 @@ export default function AuthView({ onToken }) {
             onClick={() => setMode("register")}
             style={{
               flex: 1,
-              background: mode === "register" ? "#fff" : "transparent",
-              color: mode === "register" ? "#1a1a1a" : "#6b7280",
-              boxShadow: mode === "register" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+              background: mode === "register" ? "var(--bg-card)" : "transparent",
+              color: mode === "register" ? "var(--text-primary)" : "var(--text-muted)",
+              boxShadow: mode === "register" ? "var(--shadow-card)" : "none",
               borderRadius: 6,
               fontSize: 14,
               fontWeight: 500,
@@ -97,7 +111,7 @@ export default function AuthView({ onToken }) {
 
         <form onSubmit={submit} style={{ display: "grid", gap: 16 }}>
           <div>
-            <label style={{ display: "block", fontSize: 13, fontWeight: 500, marginBottom: 6, color: "#374151" }}>
+            <label style={{ display: "block", fontSize: 13, fontWeight: 500, marginBottom: 6, color: "var(--text-secondary)" }}>
               Email
             </label>
             <input
@@ -110,7 +124,7 @@ export default function AuthView({ onToken }) {
           </div>
 
           <div>
-            <label style={{ display: "block", fontSize: 13, fontWeight: 500, marginBottom: 6, color: "#374151" }}>
+            <label style={{ display: "block", fontSize: 13, fontWeight: 500, marginBottom: 6, color: "var(--text-secondary)" }}>
               Password {mode === "register" ? "(min 8 characters)" : ""}
             </label>
             <input
@@ -129,7 +143,7 @@ export default function AuthView({ onToken }) {
           {err && <div style={{ color: "#ef4444", fontSize: 14, textAlign: "center" }}>{err}</div>}
         </form>
 
-        <div style={{ marginTop: 24, fontSize: 11, color: "#9ca3af", textAlign: "center", lineHeight: 1.5 }}>
+        <div style={{ marginTop: 24, fontSize: 11, color: "var(--text-faint)", textAlign: "center", lineHeight: 1.5 }}>
           This application is not a diagnostic tool and should not be a replacement for professional medical advice.
         </div>
       </div>

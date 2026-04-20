@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { makeApi } from "./api";
 
 import AuthView from "./views/AuthView";
@@ -14,11 +14,29 @@ const tabs = [
   { key: "knowledge", label: "Knowledge", icon: "📖" },
 ];
 
+function getStoredTheme() {
+  try {
+    return localStorage.getItem("theme") || "light";
+  } catch {
+    return "light";
+  }
+}
+
 export default function App() {
   const [token, setToken] = useState(() => localStorage.getItem("token") || "");
   const api = useMemo(() => makeApi(token), [token]);
 
   const [tab, setTab] = useState("assessment");
+  const [theme, setTheme] = useState(getStoredTheme);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  function toggleTheme() {
+    setTheme((t) => (t === "light" ? "dark" : "light"));
+  }
 
   function onToken(newToken) {
     localStorage.setItem("token", newToken);
@@ -37,7 +55,7 @@ export default function App() {
   }
 
   if (!token) {
-    return <AuthView onToken={onToken} />;
+    return <AuthView onToken={onToken} theme={theme} toggleTheme={toggleTheme} />;
   }
 
   return (
@@ -62,6 +80,10 @@ export default function App() {
         </nav>
 
         <div className="sidebar-footer">
+          <button className="theme-toggle" onClick={toggleTheme}>
+            <span className="nav-icon">{theme === "light" ? "🌙" : "☀️"}</span>
+            {theme === "light" ? "Dark Mode" : "Light Mode"}
+          </button>
           <button className="nav-item" onClick={logout}>
             <span className="nav-icon">↩</span>
             Logout
