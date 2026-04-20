@@ -8,10 +8,10 @@ import HistoryPage from "./pages/HistoryPage";
 import KnowledgePage from "./pages/KnowledgePage";
 
 const tabs = [
-  { key: "assessment", label: "Assessment" },
-  { key: "logbook", label: "Logbook" },
-  { key: "history", label: "History" },
-  { key: "knowledge", label: "Knowledge" },
+  { key: "assessment", label: "Assessment", icon: "♡" },
+  { key: "logbook", label: "Logbook", icon: "✎" },
+  { key: "history", label: "History", icon: "⏱" },
+  { key: "knowledge", label: "Knowledge", icon: "📖" },
 ];
 
 export default function App() {
@@ -41,43 +41,40 @@ export default function App() {
   }
 
   return (
-    <div>
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 20,
-        paddingBottom: 16,
-        borderBottom: "1px solid #e5e7eb",
-      }}>
-        <div>
-          <h2 style={{ fontSize: 22 }}>HeartSmart</h2>
-          <div style={{ fontSize: 12, color: "#6b7280", marginTop: 2 }}>
-            Coronary Artery Disease — Risk & Knowledge
-          </div>
+    <div className="app-layout">
+      <aside className="sidebar">
+        <div className="sidebar-brand">
+          <h2>HeartSmart</h2>
+          <span>CAD Risk & Knowledge</span>
         </div>
-        <button className="secondary" onClick={logout} style={{ fontSize: 13 }}>
-          Logout
-        </button>
-      </div>
 
-      <div style={{ display: "flex", gap: 6, marginBottom: 20 }}>
-        {tabs.map((t) => (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            className={tab === t.key ? undefined : "secondary"}
-            style={{ fontSize: 13 }}
-          >
-            {t.label}
+        <nav className="sidebar-nav">
+          {tabs.map((t) => (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`nav-item ${tab === t.key ? "active" : ""}`}
+            >
+              <span className="nav-icon">{t.icon}</span>
+              {t.label}
+            </button>
+          ))}
+        </nav>
+
+        <div className="sidebar-footer">
+          <button className="nav-item" onClick={logout}>
+            <span className="nav-icon">↩</span>
+            Logout
           </button>
-        ))}
-      </div>
+        </div>
+      </aside>
 
-      {tab === "assessment" && <AssessmentPage api={api} onUnauthorized={handleUnauthorized} />}
-      {tab === "logbook" && <LogbookPage api={api} onUnauthorized={handleUnauthorized} />}
-      {tab === "history" && <HistoryPage api={api} onUnauthorized={handleUnauthorized} />}
-      {tab === "knowledge" && <KnowledgePage api={api} onUnauthorized={handleUnauthorized} />}
+      <main className="main-content">
+        {tab === "assessment" && <AssessmentPage api={api} onUnauthorized={handleUnauthorized} />}
+        {tab === "logbook" && <LogbookPage api={api} onUnauthorized={handleUnauthorized} />}
+        {tab === "history" && <HistoryPage api={api} onUnauthorized={handleUnauthorized} />}
+        {tab === "knowledge" && <KnowledgePage api={api} onUnauthorized={handleUnauthorized} />}
+      </main>
     </div>
   );
 }

@@ -9,13 +9,6 @@ function toNumOrNull(v) {
   return Number.isFinite(n) ? n : null;
 }
 
-const card = {
-  background: "#fff",
-  border: "1px solid #e5e7eb",
-  padding: 20,
-  borderRadius: 10,
-};
-
 export default function AssessmentPage({ api, onUnauthorized }) {
   const [form, setForm] = useState({
     age: "45",
@@ -93,99 +86,112 @@ export default function AssessmentPage({ api, onUnauthorized }) {
     }
   }
 
-  function bandColor(band) {
-    if (!band) return "#6b7280";
+  function bandInfo(band) {
+    if (!band) return { color: "#6b7280", cls: "" };
     const b = band.toLowerCase();
-    if (b.includes("low")) return "#16a34a";
-    if (b.includes("moderate") || b.includes("medium")) return "#d97706";
-    if (b.includes("high")) return "#ef4444";
-    return "#6b7280";
+    if (b.includes("low")) return { color: "#16a34a", cls: "badge-green" };
+    if (b.includes("moderate") || b.includes("medium")) return { color: "#d97706", cls: "badge-amber" };
+    if (b.includes("high")) return { color: "#ef4444", cls: "badge-red" };
+    return { color: "#6b7280", cls: "" };
   }
 
   return (
-    <section style={card}>
-      <h3 style={{ marginBottom: 16 }}>Risk Assessment</h3>
+    <div>
+      <h3 style={{ marginBottom: 6 }}>Risk Assessment</h3>
+      <p style={{ color: "#6b7280", fontSize: 14, marginBottom: 20 }}>
+        Enter your details below to assess your risk of Coronary Artery Disease.
+      </p>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
-        <Field label="Age" value={form.age} onChange={(v) => onChange("age", v)} />
-
-        <Select
-          label="Sex"
-          value={form.male}
-          onChange={(v) => onChange("male", v)}
-          options={[
-            { label: "Female", value: "0" },
-            { label: "Male", value: "1" },
-          ]}
-        />
-
-        <Select
-          label="Diabetes"
-          value={form.diabetes}
-          onChange={(v) => onChange("diabetes", v)}
-          options={[
-            { label: "No", value: "0" },
-            { label: "Yes", value: "1" },
-          ]}
-        />
-
-        <Field label="BMI" value={form.BMI} onChange={(v) => onChange("BMI", v)} />
-
-        <Select
-          label="Current Smoker"
-          value={form.currentSmoker}
-          onChange={(v) => onChange("currentSmoker", v)}
-          options={[
-            { label: "No", value: "0" },
-            { label: "Yes", value: "1" },
-          ]}
-        />
-
-        <div>
-          <label style={{ display: "block", fontSize: 13, fontWeight: 500, marginBottom: 4 }}>
-            Cigarettes / day
-          </label>
-          <input
-            value={isSmoker ? form.cigsPerDay : "0"}
-            onChange={(e) => onChange("cigsPerDay", e.target.value)}
-            disabled={!isSmoker || unknown.cigsPerDay}
-            style={{ width: "100%" }}
+      <div className="card">
+        <h4 style={{ marginBottom: 14, color: "#374151" }}>Personal Details</h4>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+          <Field label="Age" value={form.age} onChange={(v) => onChange("age", v)} />
+          <Select
+            label="Sex"
+            value={form.male}
+            onChange={(v) => onChange("male", v)}
+            options={[
+              { label: "Female", value: "0" },
+              { label: "Male", value: "1" },
+            ]}
           />
-          {isSmoker && (
-            <label style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 6, fontSize: 12, color: "#6b7280" }}>
-              <input
-                type="checkbox"
-                checked={unknown.cigsPerDay}
-                onChange={(e) => setUnknownFlag("cigsPerDay", e.target.checked)}
-              />
-              I don't know (default 10/day)
-            </label>
-          )}
+          <Field label="BMI" value={form.BMI} onChange={(v) => onChange("BMI", v)} />
         </div>
+      </div>
 
-        <OptionalNumber
-          label="Systolic BP"
-          value={form.sysBP}
-          unknown={unknown.sysBP}
-          setUnknown={(v) => setUnknownFlag("sysBP", v)}
-          onChange={(v) => onChange("sysBP", v)}
-        />
+      <div className="card" style={{ marginTop: 12 }}>
+        <h4 style={{ marginBottom: 14, color: "#374151" }}>Health Conditions</h4>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+          <Select
+            label="Diabetes"
+            value={form.diabetes}
+            onChange={(v) => onChange("diabetes", v)}
+            options={[
+              { label: "No", value: "0" },
+              { label: "Yes", value: "1" },
+            ]}
+          />
+          <Select
+            label="Current Smoker"
+            value={form.currentSmoker}
+            onChange={(v) => onChange("currentSmoker", v)}
+            options={[
+              { label: "No", value: "0" },
+              { label: "Yes", value: "1" },
+            ]}
+          />
+          <div>
+            <label style={{ display: "block", fontSize: 13, fontWeight: 500, marginBottom: 4 }}>
+              Cigarettes / day
+            </label>
+            <input
+              value={isSmoker ? form.cigsPerDay : "0"}
+              onChange={(e) => onChange("cigsPerDay", e.target.value)}
+              disabled={!isSmoker || unknown.cigsPerDay}
+              style={{ width: "100%" }}
+            />
+            {isSmoker && (
+              <label style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 6, fontSize: 12, color: "#6b7280" }}>
+                <input
+                  type="checkbox"
+                  checked={unknown.cigsPerDay}
+                  onChange={(e) => setUnknownFlag("cigsPerDay", e.target.checked)}
+                />
+                I don't know (default 10/day)
+              </label>
+            )}
+          </div>
+        </div>
+      </div>
 
-        <OptionalNumber
-          label="Total Cholesterol"
-          value={form.totChol}
-          unknown={unknown.totChol}
-          setUnknown={(v) => setUnknownFlag("totChol", v)}
-          onChange={(v) => onChange("totChol", v)}
-        />
-
-        <OptionalNumber
-          label="Glucose"
-          value={form.glucose}
-          unknown={unknown.glucose}
-          setUnknown={(v) => setUnknownFlag("glucose", v)}
-          onChange={(v) => onChange("glucose", v)}
-        />
+      <div className="card" style={{ marginTop: 12 }}>
+        <h4 style={{ marginBottom: 14, color: "#374151" }}>Measurements</h4>
+        <p style={{ fontSize: 13, color: "#9ca3af", marginBottom: 14 }}>
+          If you don't know a value, tick the checkbox and a population average will be used.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+          <OptionalNumber
+            label="Systolic BP (mmHg)"
+            value={form.sysBP}
+            unknown={unknown.sysBP}
+            setUnknown={(v) => setUnknownFlag("sysBP", v)}
+            onChange={(v) => onChange("sysBP", v)}
+          />
+          <OptionalNumber
+            label="Total Cholesterol (mg/dL)"
+            value={form.totChol}
+            unknown={unknown.totChol}
+            setUnknown={(v) => setUnknownFlag("totChol", v)}
+            onChange={(v) => onChange("totChol", v)}
+          />
+          <OptionalNumber
+            label="Glucose (mg/dL)"
+            value={form.glucose}
+            unknown={unknown.glucose}
+            setUnknown={(v) => setUnknownFlag("glucose", v)}
+            onChange={(v) => onChange("glucose", v)}
+          />
+        </div>
       </div>
 
       <div style={{ marginTop: 16, display: "flex", gap: 8, alignItems: "center" }}>
@@ -196,43 +202,38 @@ export default function AssessmentPage({ api, onUnauthorized }) {
       </div>
 
       {result && (
-        <div style={{
-          marginTop: 16,
-          padding: 16,
-          background: "#f9fafb",
-          borderRadius: 8,
-          border: "1px solid #e5e7eb",
-        }}>
-          <h3 style={{ marginBottom: 12 }}>Result</h3>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
-            <div>
-              <div style={{ fontSize: 12, color: "#6b7280" }}>Risk Score</div>
-              <div style={{ fontSize: 22, fontWeight: 700 }}>
-                {(result.risk * 100).toFixed(2)}%
+        <div className="result-card" style={{ marginTop: 20 }}>
+          <h3 style={{ marginBottom: 16, textAlign: "center" }}>Your Results</h3>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20 }}>
+            <div className="stat">
+              <div className="stat-label">Risk Score</div>
+              <div className="stat-value" style={{ color: bandInfo(result.risk_band).color }}>
+                {(result.risk * 100).toFixed(1)}%
               </div>
             </div>
-            <div>
-              <div style={{ fontSize: 12, color: "#6b7280" }}>Risk Band</div>
-              <div style={{ fontSize: 18, fontWeight: 600, color: bandColor(result.risk_band) }}>
-                {result.risk_band}
+            <div className="stat">
+              <div className="stat-label">Risk Band</div>
+              <div style={{ marginTop: 4 }}>
+                <span className={`badge ${bandInfo(result.risk_band).cls}`} style={{ fontSize: 14, padding: "4px 12px" }}>
+                  {result.risk_band}
+                </span>
               </div>
             </div>
-            <div>
-              <div style={{ fontSize: 12, color: "#6b7280" }}>Confidence</div>
-              <div style={{ fontSize: 16, fontWeight: 500 }}>{result.confidence}</div>
+            <div className="stat">
+              <div className="stat-label">Confidence</div>
+              <div className="stat-value" style={{ fontSize: 18 }}>{result.confidence}</div>
             </div>
             {result.range && (
-              <div>
-                <div style={{ fontSize: 12, color: "#6b7280" }}>Range</div>
-                <div style={{ fontSize: 16, fontWeight: 500 }}>
-                  {(result.range.low * 100).toFixed(2)}% – {(result.range.high * 100).toFixed(2)}%
+              <div className="stat">
+                <div className="stat-label">Range</div>
+                <div className="stat-value" style={{ fontSize: 18 }}>
+                  {(result.range.low * 100).toFixed(1)}% – {(result.range.high * 100).toFixed(1)}%
                 </div>
               </div>
             )}
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 }

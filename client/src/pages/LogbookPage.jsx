@@ -6,13 +6,6 @@ function toNumOrNull(v) {
   return Number.isFinite(n) ? n : null;
 }
 
-const card = {
-  background: "#fff",
-  border: "1px solid #e5e7eb",
-  padding: 20,
-  borderRadius: 10,
-};
-
 export default function LogbookPage({ api, onUnauthorized }) {
   const [logbook, setLogbook] = useState({
     medications: [{ name: "", dose: "", frequency: "", notes: "" }],
@@ -138,82 +131,75 @@ export default function LogbookPage({ api, onUnauthorized }) {
   }
 
   return (
-    <section style={card}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h3>Logbook</h3>
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+        <div>
+          <h3 style={{ marginBottom: 4 }}>Logbook</h3>
+          <p style={{ color: "#6b7280", fontSize: 14 }}>Track your medicines and exercise routine.</p>
+        </div>
         <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-          {msg && <span style={{ color: "#16a34a", fontSize: 13 }}>{msg}</span>}
+          {msg && <span style={{ color: "#16a34a", fontSize: 13, fontWeight: 500 }}>{msg}</span>}
           {err && <span style={{ color: "#ef4444", fontSize: 13 }}>{err}</span>}
           <button className="secondary" onClick={load} disabled={loading} style={{ fontSize: 13 }}>
             {loading ? "Loading..." : "Reload"}
           </button>
           <button onClick={save} disabled={saving || loading} style={{ fontSize: 13 }}>
-            {saving ? "Saving..." : "Save"}
+            {saving ? "Saving..." : "Save All"}
           </button>
         </div>
       </div>
 
-      <div style={{ marginTop: 20 }}>
-        <h4 style={{ marginBottom: 10 }}>Medicines</h4>
+      <div className="card" style={{ marginBottom: 12 }}>
+        <div className="card-header">
+          <h4>Medicines</h4>
+          <button className="secondary" onClick={addMedication} style={{ fontSize: 13 }}>
+            + Add medicine
+          </button>
+        </div>
         {logbook.medications.map((m, i) => (
-          <div
-            key={i}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "2fr 1fr 1fr 2fr auto",
-              gap: 8,
-              marginBottom: 8,
-            }}
-          >
+          <div key={i} className="entry-row entry-row-meds">
             <input placeholder="Name" value={m.name} onChange={(e) => updateMedication(i, "name", e.target.value)} />
             <input placeholder="Dose" value={m.dose} onChange={(e) => updateMedication(i, "dose", e.target.value)} />
             <input placeholder="Frequency" value={m.frequency} onChange={(e) => updateMedication(i, "frequency", e.target.value)} />
             <input placeholder="Notes" value={m.notes} onChange={(e) => updateMedication(i, "notes", e.target.value)} />
             <button
-              className="danger"
+              className="ghost"
               onClick={() => removeMedication(i)}
               disabled={logbook.medications.length === 1}
-              style={{ fontSize: 13 }}
+              style={{ fontSize: 18, padding: "4px 8px" }}
+              title="Remove"
             >
-              Remove
+              ×
             </button>
           </div>
         ))}
-        <button className="secondary" onClick={addMedication} style={{ fontSize: 13 }}>
-          + Add medicine
-        </button>
       </div>
 
-      <div style={{ marginTop: 24 }}>
-        <h4 style={{ marginBottom: 10 }}>Exercises</h4>
+      <div className="card">
+        <div className="card-header">
+          <h4>Exercises</h4>
+          <button className="secondary" onClick={addExercise} style={{ fontSize: 13 }}>
+            + Add exercise
+          </button>
+        </div>
         {logbook.exercises.map((ex, i) => (
-          <div
-            key={i}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "2fr 1fr 1fr 2fr auto",
-              gap: 8,
-              marginBottom: 8,
-            }}
-          >
+          <div key={i} className="entry-row entry-row-exercises">
             <input placeholder="Type" value={ex.type} onChange={(e) => updateExercise(i, "type", e.target.value)} />
             <input placeholder="Minutes" value={ex.durationMinutes ?? ""} onChange={(e) => updateExercise(i, "durationMinutes", e.target.value)} />
             <input placeholder="Sessions/week" value={ex.sessionsPerWeek ?? ""} onChange={(e) => updateExercise(i, "sessionsPerWeek", e.target.value)} />
             <input placeholder="Notes" value={ex.notes} onChange={(e) => updateExercise(i, "notes", e.target.value)} />
             <button
-              className="danger"
+              className="ghost"
               onClick={() => removeExercise(i)}
               disabled={logbook.exercises.length === 1}
-              style={{ fontSize: 13 }}
+              style={{ fontSize: 18, padding: "4px 8px" }}
+              title="Remove"
             >
-              Remove
+              ×
             </button>
           </div>
         ))}
-        <button className="secondary" onClick={addExercise} style={{ fontSize: 13 }}>
-          + Add exercise
-        </button>
       </div>
-    </section>
+    </div>
   );
 }
