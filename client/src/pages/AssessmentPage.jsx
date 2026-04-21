@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Field from "../ui/Field";
 import Select from "../ui/Select";
 import OptionalNumber from "../ui/OptionalNumber";
@@ -10,6 +10,28 @@ function toNumOrNull(v) {
 }
 
 export default function AssessmentPage({ api, onUnauthorized }) {
+  const [lastAssessment, setLastAssessment] = useState(null);
+
+  useEffect(() => {
+    api.get("/api/history?limit=1")
+      .then((resp) => {
+        if (Array.isArray(resp.data) && resp.data.length > 0) {
+          setLastAssessment(new Date(resp.data[0].createdAt));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  function getReminderMessage() {
+    if (!lastAssessment) return null;
+    const days = Math.floor((Date.now() - lastAssessment.getTime()) / (1000 * 60 * 60 * 24));
+    if (days >= 90) return `Your last assessment was ${days} days ago. It's recommended to reassess every 3 months.`;
+    if (days >= 60) return `Your last assessment was ${days} days ago. Consider reassessing soon.`;
+    return null;
+  }
+
+  const reminder = getReminderMessage();
+
   const [form, setForm] = useState({
     age: "45",
     male: "1",
@@ -101,6 +123,19 @@ export default function AssessmentPage({ api, onUnauthorized }) {
       <p style={{ color: "#6b7280", fontSize: 14, marginBottom: 20 }}>
         Enter your details below to assess your risk of Coronary Artery Disease.
       </p>
+
+      {reminder && (
+        <div style={{
+          padding: "10px 14px",
+          marginBottom: 12,
+          borderRadius: 8,
+          fontSize: 14,
+          background: "var(--badge-amber-bg)",
+          color: "var(--badge-amber-text)",
+        }}>
+          {reminder}
+        </div>
+      )}
 
       <div className="card">
         <h4 style={{ marginBottom: 14, color: "#374151" }}>Personal Details</h4>
