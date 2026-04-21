@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import RiskChart from "../ui/RiskChart";
 
 export default function HistoryPage({ api, onUnauthorized }) {
   const [history, setHistory] = useState([]);
@@ -56,6 +57,8 @@ export default function HistoryPage({ api, onUnauthorized }) {
       </div>
 
       {err && <div style={{ color: "#ef4444", marginBottom: 12, fontSize: 14 }}>{err}</div>}
+
+      <RiskChart history={history} />
 
       <div style={{ display: "grid", gap: 10 }}>
         {Array.isArray(history) && history.length === 0 && (
