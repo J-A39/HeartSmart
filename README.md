@@ -2,6 +2,8 @@
 
 A web application for predicting Coronary Artery Disease (CAD) risk and helping users learn about heart health. Built as a final year project for BSc Computer Science at the University of Westminster.
 
+https://heartsmart.onrender.com/ is my hosted website.
+
 ## What it does
 
 HeartSmart lets users enter their health details (age, BMI, blood pressure, cholesterol, etc.) and get a personalised risk prediction powered by a machine learning model trained on the Framingham Heart Study dataset. Users can also track their medications and exercise, view their risk history over time, and learn about heart disease through short topics and quizzes.
