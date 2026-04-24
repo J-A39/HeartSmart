@@ -95,7 +95,6 @@ export default function KnowledgePage({ api, onUnauthorized }) {
     }
   }
 
-  // topic list
   if (!selectedTopic) {
     return (
       <div>
@@ -159,7 +158,6 @@ export default function KnowledgePage({ api, onUnauthorized }) {
     );
   }
 
-  // quiz finished
   if (quizMode && finished) {
     const quiz = selectedTopic.quiz;
     const pct = Math.round((score / quiz.length) * 100);
@@ -193,7 +191,6 @@ export default function KnowledgePage({ api, onUnauthorized }) {
     );
   }
 
-  // quiz in progress
   if (quizMode) {
     const quiz = selectedTopic.quiz;
     const q = quiz[currentQ];
@@ -269,7 +266,6 @@ export default function KnowledgePage({ api, onUnauthorized }) {
     );
   }
 
-  // topic content view
   return (
     <div>
       <button className="ghost" onClick={backToTopics} style={{ marginBottom: 16 }}>

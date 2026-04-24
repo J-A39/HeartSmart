@@ -5,7 +5,6 @@ const Logbook = require("../models/Logbook");
 const RiskAssessment = require("../models/RiskAssessment");
 const QuizAttempt = require("../models/QuizAttempt");
 
-// export all user data as JSON
 router.get("/user/export", requireAuth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-passwordHash").lean();
@@ -29,7 +28,6 @@ router.get("/user/export", requireAuth, async (req, res) => {
   }
 });
 
-// delete all user data and account
 router.delete("/user/data", requireAuth, async (req, res) => {
   try {
     const userId = req.user.id;

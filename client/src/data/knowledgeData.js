@@ -1,15 +1,3 @@
-/*
-  Knowledge topics and quiz questions for HeartSmart.
-
-  To add/edit content: each topic has a title, a content array (paragraphs of text),
-  and a quiz array (multiple choice questions).
-
-  Quiz format:
-    question  – the question text
-    options   – array of 4 answer strings
-    answer    – index of the correct option (0-based)
-*/
-
 const knowledgeData = [
   {
     id: "what-is-cad",

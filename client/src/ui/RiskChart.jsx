@@ -1,8 +1,6 @@
 import React from "react";
 
-// simple SVG line chart — no dependencies
 export default function RiskChart({ history }) {
-  // grab entries that have a valid risk score, oldest first
   const points = (history || [])
     .filter((r) => r.rawMlResponse?.risk != null)
     .slice()
@@ -38,7 +36,6 @@ export default function RiskChart({ history }) {
 
   const linePath = points.map((p, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)},${y(p.risk).toFixed(1)}`).join(" ");
 
-  // y-axis labels (3-4 ticks)
   const tickCount = 4;
   const yTicks = [];
   for (let i = 0; i <= tickCount; i++) {
@@ -46,7 +43,6 @@ export default function RiskChart({ history }) {
     yTicks.push(val);
   }
 
-  // x-axis labels — first, middle, last
   const xLabels = [0];
   if (points.length > 2) xLabels.push(Math.floor(points.length / 2));
   xLabels.push(points.length - 1);
@@ -59,7 +55,6 @@ export default function RiskChart({ history }) {
     <div className="card" style={{ marginBottom: 12, padding: 16 }}>
       <h4 style={{ marginBottom: 12 }}>Risk Over Time</h4>
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto" }}>
-        {/* grid lines */}
         {yTicks.map((val) => (
           <line
             key={val}
@@ -72,7 +67,6 @@ export default function RiskChart({ history }) {
           />
         ))}
 
-        {/* y-axis labels */}
         {yTicks.map((val) => (
           <text
             key={val}
@@ -86,7 +80,6 @@ export default function RiskChart({ history }) {
           </text>
         ))}
 
-        {/* x-axis labels */}
         {xLabels.map((i) => (
           <text
             key={i}
@@ -100,10 +93,8 @@ export default function RiskChart({ history }) {
           </text>
         ))}
 
-        {/* line */}
         <path d={linePath} fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
 
-        {/* dots */}
         {points.map((p, i) => (
           <circle key={i} cx={x(i)} cy={y(p.risk)} r="4" fill="var(--accent)" />
         ))}
